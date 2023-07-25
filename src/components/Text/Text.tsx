@@ -4,6 +4,10 @@ import {
   TextProps as RNTextProps,
   TextStyle,
 } from 'react-native';
+import {createText} from '@shopify/restyle';
+
+const SRText = createText<Theme>();
+type SRTextProps = React.ComponentProps<typeof SRText>;
 
 interface TextProps extends RNTextProps {
   preset?: TextVariants;
@@ -87,13 +91,13 @@ export function Text({
   bold,
   italic,
   semiBold,
-  ...rest
+  ...SRTextProps
 }: TextProps) {
   const fontFamily = getFontFamily(preset, bold, italic, semiBold);
 
   return (
-    <RNText style={[$fontSizes[preset], {fontFamily}, style]} {...rest}>
+    <SRText style={[$fontSizes[preset], {fontFamily}, style]} {...SRTextProps}>
       {children}
-    </RNText>
+    </SRText>
   );
 }
