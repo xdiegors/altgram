@@ -1,20 +1,25 @@
 import React from 'react';
-import {useTheme} from '@shopify/restyle';
-import {Box, TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
+import {TouchableOpacityBox, TouchableOpacityBoxProps} from '../Box/Box';
 import {Text} from '../Text/Text';
-import {Theme} from '../../theme/theme';
-import {ActivityIndicator} from 'react-native';
-
+import {ActivityIndicator} from '../ActivityIndicator/ActivityIndicator';
+import {buttonPresets} from './buttonPresets';
 interface ButtonProps extends TouchableOpacityBoxProps {
   title: string;
   loading?: boolean;
+  preset?: ButtonPreset;
+  disabled?: boolean;
 }
+
+export type ButtonPreset = 'primary' | 'outline';
 
 export function Button({
   title,
   loading,
+  preset = 'primary',
+  disabled,
   ...touchableOpacityBoxProps
 }: ButtonProps) {
+  const buttonPreset = buttonPresets[preset][disabled ? 'disabled' : 'default'];
   return (
     <TouchableOpacityBox
       backgroundColor="buttonPrimary"
@@ -23,11 +28,13 @@ export function Button({
       alignItems="center"
       justifyContent="center"
       borderRadius="s16"
+      disabled={disabled || loading}
+      {...buttonPreset.container}
       {...touchableOpacityBoxProps}>
       {loading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={buttonPreset.content} />
       ) : (
-        <Text preset="paragraphMedium" bold color="primaryContrast">
+        <Text preset="paragraphMedium" bold color={buttonPreset.content}>
           {title}
         </Text>
       )}

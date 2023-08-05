@@ -1,51 +1,16 @@
 import React from 'react';
-import {
-  Text as RNText,
-  TextProps as RNTextProps,
-  TextStyle,
-} from 'react-native';
+import {TextStyle} from 'react-native';
 import {createText} from '@shopify/restyle';
+import {Theme} from '../../theme/theme';
 
 const SRText = createText<Theme>();
 type SRTextProps = React.ComponentProps<typeof SRText>;
 
-interface TextProps extends RNTextProps {
+interface TextProps extends SRTextProps {
   preset?: TextVariants;
   bold?: boolean;
   italic?: boolean;
   semiBold?: boolean;
-}
-
-function getFontFamily(
-  preset: TextVariants,
-  bold?: boolean,
-  italic?: boolean,
-  semiBold?: boolean,
-) {
-  if (
-    preset === 'headingLarge' ||
-    preset === 'headingMedium' ||
-    preset === 'headingSmall'
-  ) {
-    return italic ? $fontFamily.boldItalic : $fontFamily.bold;
-  }
-
-  if (bold && italic) {
-    return $fontFamily.boldItalic;
-  }
-  if (bold) {
-    return $fontFamily.bold;
-  }
-  if (semiBold && italic) {
-    return $fontFamily.mediumItalic;
-  }
-  if (semiBold) {
-    return $fontFamily.medium;
-  }
-  if (italic) {
-    return $fontFamily.italic;
-  }
-  return $fontFamily.regular;
 }
 
 type TextVariants =
@@ -96,8 +61,43 @@ export function Text({
   const fontFamily = getFontFamily(preset, bold, italic, semiBold);
 
   return (
-    <SRText style={[$fontSizes[preset], {fontFamily}, style]} {...SRTextProps}>
+    <SRText
+      color="backgroundContrast"
+      style={[$fontSizes[preset], {fontFamily}, style]}
+      {...SRTextProps}>
       {children}
     </SRText>
   );
+}
+
+function getFontFamily(
+  preset: TextVariants,
+  bold?: boolean,
+  italic?: boolean,
+  semiBold?: boolean,
+) {
+  if (
+    preset === 'headingLarge' ||
+    preset === 'headingMedium' ||
+    preset === 'headingSmall'
+  ) {
+    return italic ? $fontFamily.boldItalic : $fontFamily.bold;
+  }
+
+  if (bold && italic) {
+    return $fontFamily.boldItalic;
+  }
+  if (bold) {
+    return $fontFamily.bold;
+  }
+  if (semiBold && italic) {
+    return $fontFamily.mediumItalic;
+  }
+  if (semiBold) {
+    return $fontFamily.medium;
+  }
+  if (italic) {
+    return $fontFamily.italic;
+  }
+  return $fontFamily.regular;
 }
